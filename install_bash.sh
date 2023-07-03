@@ -49,22 +49,7 @@ echo 'if [[ -f "$mod_bashrc" ]]; then
 else
   echo "No custom bashrc to be loaded!"
 fi' >> "$HOME/.bashrc"
-# Check if reboot and shutdown are allowed by user
-if sudo -n /sbin/reboot &>/dev/null && sudo -n /sbin/shutdown &>/dev/null; then
-    echo "You are allowed to use REBOOT and SHUTDOWN."
-else
-    echo "You are not allowed to use REBOOT and SHUTDOWN."
 
-    # Fixing sudoers
-    sudo touch /etc/sudoers.d/reboot_shutdown
-    echo "$USER ALL=(ALL) NOPASSWD: /sbin/reboot, /sbin/shutdown" >> sudo tee /etc/sudoers.d/reboot_shutdown
-    if [ $? -eq 0 ]; then
-        echo "You are now allowed to use REBOOT and SHUTDOWN."
-    else
-        echo "Error in sudoers."
-        exit 1
-    fi
-fi
 
 # -------------------------------------------------
 # Adding custom colors file
