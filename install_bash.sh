@@ -64,10 +64,10 @@ else
     # Delimiters do not exist, add content
     echo -e "$start_delimiter\n\
 mod_bashrc=\"$USER_BASHRC\"\n\
-if [[ -f \"\$mod_bashrc\" ]]; then\\
-  . \"\$mod_bashrc\"\\
-else\\
-  echo \"No custom bashrc to be loaded!\"\\
+if [[ -f \"\$mod_bashrc\" ]]; then\n\
+  . \"\$mod_bashrc\"\n\
+else\n\
+  echo \"No custom bashrc to be loaded!\"\n\
 fi\n\
 $end_delimiter\n" >> "$filename"
 fi
