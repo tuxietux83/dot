@@ -43,13 +43,34 @@ for FILE in "${FILES[@]}"; do
    fi
 done
 # Modify ~/.bashrc
-echo "mod_bashrc=$USER_BASHRC" >> "$HOME/.bashrc"
-echo 'if [[ -f "$mod_bashrc" ]]; then
-  . "$mod_bashrc"
-else
-  echo "No custom bashrc to be loaded!"
-fi' >> "$HOME/.bashrc"
+# Delimiters
+filename="$HOME/.bashrc"
+start_delimiter="# Bash Install start"
+end_delimiter="# Bash Install end"
 
+# Check for delimiters
+if grep -Fxq "$start_delimiter" "$filename" && grep -Fxq "$end_delimiter" "$filename"; then
+    # Delimiters exist, replace content
+    sed -i "/$start_delimiter/,/$end_delimiter/c\\
+$start_delimiter\\
+mod_bashrc=\"$USER_BASHRC\"\\
+if [[ -f \"\$mod_bashrc\" ]]; then\\
+  . \"\$mod_bashrc\"\\
+else\\
+  echo \"No custom bashrc to be loaded!\"\\
+fi\\
+$end_delimiter" "$filename"
+else
+    # Delimiters do not exist, add content
+    echo -e "$start_delimiter\n\
+mod_bashrc=\"$USER_BASHRC\"\n\
+if [[ -f \"\$mod_bashrc\" ]]; then\\
+  . \"\$mod_bashrc\"\\
+else\\
+  echo \"No custom bashrc to be loaded!\"\\
+fi\n\
+$end_delimiter\n" >> "$filename"
+fi
 
 # -------------------------------------------------
 # Adding custom colors file
@@ -159,3 +180,7 @@ alias_list=(
 for alias in "${alias_list[@]}"; do
     echo "$alias" >> "$USER_ALIASES"
 done
+
+# -------------------------------------------------
+# Reload bashrc with new modifications
+source ~/.bashrc
