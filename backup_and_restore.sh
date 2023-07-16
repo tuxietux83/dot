@@ -8,7 +8,7 @@ set -e
 folder_format=$(date +%Y%m%d-%H%M)
 folder_path="$HOME/Documents/backup"
 folder="$folder_path/$folder_format"
-restore_folder="$HOME/Documents/restore"
+restore_folder="$HOME"
 
 # Check for backup dir
 if [ ! -d "$folder_path" ]; then
@@ -16,7 +16,7 @@ if [ ! -d "$folder_path" ]; then
 fi
 
 # Check if rsync is installed
-if !command -v rsync &>/dev/null; then
+if ! command -v rsync &>/dev/null; then
    sudo apt install -y rsync
 fi
 
