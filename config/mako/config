@@ -1,0 +1,40 @@
+# Last edit: 19.August.2023
+sort=-priority
+on-notify=exec mpv /usr/share/sounds/freedesktop/stereo/message-new-instant.oga
+font=JetBrainsMono Regular 10
+background-color=#282a36b3
+text-color=#ffffff
+width=600
+height=300
+outer-margin=0
+margin=4
+padding=5
+border-size=2
+border-color=#ffffff
+border-radius=10
+progress-color=#000000
+progress-color=source #021b24cc
+# Icon
+icons=1
+max-icon-size=24
+icon-path=/usr/share/icons/gnome
+icon-location=left
+markup=1
+format=<b>%a: %s</b>\n%b
+text-alignment=center
+default-timeout=25000
+max-visible=-1
+anchor=top-center
+
+
+[urgency=low]
+border-color=#07607e
+background-color=#808080cc
+
+[urgency=normal]
+border-color=#808080
+background-color=#07607ecc
+
+[urgency=high]
+border-color=#000000
+background-color=#4c0000cc
