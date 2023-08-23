@@ -49,19 +49,6 @@ INFO_CHECK="${green} ${default} "
 NOTIFY="notify-send -u low -t 5000 -e -i dialog-information"
 DESKTOP_SESSION=$(echo $DESKTOP_SESSION | tr '[:upper:]' '[:lower:]')
 
-# We need the bar up and running
-# But we need time for audio services to restart
-SERVICE="waybar"
-SERVICE_UPDATE
-! command -v "$SERVICE" &>/dev/null && echo "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Not found!$INFO_CLOSE" && exit 1
-echo -e "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Stopping ...$INFO_CLOSE"
-pkill "$SERVICE" &>/dev/null
-sleep 1
-echo "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Starting ..."
-[ "$DESKTOP_SESSION" = sway ] && waybar -c $HOME/.config/waybar/config-sway &>/dev/null &
-[ "$DESKTOP_SESSION" = hyprland ] && waybar -c $HOME/.config/waybar/config-hypr &>/dev/null &
-echo "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Started ...$INFO_CHECK"
-
 # Session check for xdg-desktop-portals and session.target
 case $DESKTOP_SESSION in
 	hyprland)
@@ -221,5 +208,18 @@ for service in "${audio[@]}"; do
 		echo -e "$SCTL_INFO$SERVICE_INFO$INFO_ARROW $SERVICE not found! $INFO_CLOSE"
 	fi
 done
+
+
+# We need the bar up and running
+# But we need time for audio services to restart
+SERVICE="waybar"
+SERVICE_UPDATE
+! command -v "$SERVICE" &>/dev/null && echo "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Not found!$INFO_CLOSE" && exit 1
+echo -e "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Stopping ...$INFO_CLOSE"
+pkill "$SERVICE" &>/dev/null && sleep 1
+echo "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Starting ..."
+[ "$DESKTOP_SESSION" = sway ] && waybar -c $HOME/.config/waybar/config-sway &>/dev/null &
+[ "$DESKTOP_SESSION" = hyprland ] && waybar -c $HOME/.config/waybar/config-hypr &>/dev/null &
+echo "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Started ...$INFO_CHECK"
 
 [ "$DESKTOP_SESSION" = "sway" ] && swaymsg reload
