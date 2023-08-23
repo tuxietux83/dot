@@ -1,6 +1,7 @@
-exec $HOME/bin/export_env.sh
+#exec $HOME/bin/export_env.sh
 exec $HOME/bin/autostart.sh
-
+exec pasystray -m 100 -i 5 &
+exec nm-applet --indicator &
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
@@ -206,7 +207,7 @@ for_window [app_id="kitty"] move to workspace $ws1
 for_window [app_id="kitty"] focus
 for_window [app_id="Firefox-esr"] move to workspace $ws5
 for_window [app_id="Firefox-esr"] focus
-for_window [class="Firefox-esr"] move to workspace $ws5
+for_window [class="Firefox-esr"] move to workspace $ws6
 for_window [class="Firefox-esr"] focus
 for_window [app_id="Vivaldi-stable"] move to workspace $ws1
 for_window [app_id="Vivaldi-stable"] focus
