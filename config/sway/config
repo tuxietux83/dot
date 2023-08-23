@@ -1,0 +1,294 @@
+exec $HOME/bin/export_env.sh
+exec $HOME/bin/autostart.sh
+
+### Output configuration
+#
+# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
+output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
+####### Some variables
+set $mod Mod4
+set $term kitty
+set $menu exec wofi --show drun | wmenu | xargs swaymsg exec --
+#bindsym $mod+d exec $NSI dmenu_run
+bindsym $mod+d $menu
+set $NSI --no-startup-id
+set $NS exec notify-send
+
+####### Shortcuts
+# Use pactl to adjust volume in PulseAudio.
+set $refresh_i3status killall -SIGUSR1 i3status
+bindsym XF86AudioRaiseVolume exec $NSI pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec $NSI pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+bindsym XF86AudioMute exec $NSI pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute exec $NSI pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+# start a terminal
+bindsym $mod+Return exec $term
+# start dmenu (a program launcher)
+# reload the configuration file
+bindsym $mod+Shift+c reload
+# restart i3 inplace
+bindsym $mod+Shift+z restart
+bindsym $mod+Shift+e exec "swaynag -t warning\
+                          -m 'System actions:'\
+                          -B ' Shutdown' 'systemctl poweroff'\
+                          -B ' Restart' 'systemctl restart'\
+                          -B ' Logout' 'swaymsg exit'\
+                          -f 'pango:$font_ $size_nagbar'"
+ # YT-dlp to mpv
+ bindsym $mod+a $NS -i $HOME/.icons/Wings-Dark-Icons/apps/32/AdobeFlash.svg " "\ "YouTube URL" ""\ $(xclip -o); exec mpv $(xclip -o)
+ # Mouse right click menu
+ bindsym --whole-window  $mod+button3 exec $HOME/bin/right_click.sh
+ 
+#### Menus
+# Browsers
+set $mode_browsers Launch: [F]irefox [V]ivaldi [C]Cromium
+bindsym $mod+b mode "$mode_browsers"
+mode "$mode_browsers" {
+    bindsym f exec firefox-esr; focus; $NS " Opening Firefox"; mode "default"
+    bindsym v exec vivaldi; focus; $NS -i /usr/share/icons/hicolor/32x32/apps/vivaldi.png "Opening Vivaldi"; mode "default"
+    bindsym c exec chromium; mode "default"
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+}
+## PowerOff, Restart, Logout
+set $mode_system Launch:  [S]hutdown  [R]eboot  [L]ogout
+bindsym $mod+Shift+x mode "$mode_system"
+mode "$mode_system" {
+    bindsym s exec systemctl poweroff
+    bindsym r exec systemctl reboot
+    bindsym l exec swaymsg exit
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+}
+
+############################################################################################
+####### i3 settings
+# Fonts
+set $size 12
+set $size_nagbar 8
+set $font_ FontAwesome
+
+font pango: $font_ $size
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+# Focus follow mouse
+focus_follows_mouse no
+
+# move tiling windows via drag & drop by left-clicking into the title bar,
+# or left-clicking anywhere into the window while holding the floating modifier.
+#tiling_drag modifier titlebar
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# enter fullscreen mode for the focused container
+bindsym $mod+Shift+f fullscreen toggle
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+# bindsym $mod+a focus parent
+
+# focus the child container
+# bindsym $mod+d focus child
+
+# change focus
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+# ----------------------------------------------------------------------------
+# resize window (you can also use the mouse for that)
+set $mode_resize Resize: Arrows [Left] [Down] [Up] [Right]
+bindsym $mod+Shift+r mode "$mode_resize"
+mode "$mode_resize" {
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+        # back to normal: Enter or Escape or $mod+Shift+r
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+Shift+r mode "default"
+}
+# ----------------------------------------------------------------------------
+# Change split mode (horizontal, vertocal, toggle)
+set $mode_split Split: [H]orizontal [V]Ertical [T]oggle
+bindsym $mod+Shift+s mode "$mode_split"
+mode "$mode_split" {
+        bindsym h split h
+        bindsym v split v
+        bindsym t split t
+        # back to normal: Enter or Escape or $mod+Shift+s
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+Shift+s mode "default"
+}
+# ----------------------------------------------------------------------------
+# change container layout (stacked, tabbed, toggle split)
+set $mode_layuot Container layout: [Q]Stacked [W]Tabbed [E]Toggle split
+bindsym $mod+Shift+l mode "$mode_layuot"
+mode "$mode_layuot" {
+        bindsym q layout stacking
+        bindsym w layout tabbed
+        bindsym e layout toggle split
+        # back to normal: Enter or Escape or $mod+Shift+l
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+Shift+l mode "default"
+}
+# ----------------------------------------------------------------------------
+
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# Workspaces assigns 
+workspace $ws1 output DP-1
+workspace $ws2 output DP-1
+workspace $ws3 output DP-1
+workspace $ws4 output DP-1
+workspace $ws5 output DP-1
+workspace $ws6 output DP-1
+workspace $ws7 output DP-1
+workspace $ws8 output DP-1
+workspace $ws9 output DP-2
+workspace $ws10 output DP-2
+
+# switch to workspace
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10
+
+# Workspace, use xprop for window class name
+for_window [app_id="Xfce4-terminal"] move to workspace $ws1
+for_window [app_id="Xfce4-terminal"] focus
+for_window [app_id="kitty"] move to workspace $ws1
+for_window [app_id="kitty"] focus
+for_window [app_id="Firefox-esr"] move to workspace $ws5
+for_window [app_id="Firefox-esr"] focus
+for_window [class="Firefox-esr"] move to workspace $ws5
+for_window [class="Firefox-esr"] focus
+for_window [app_id="Vivaldi-stable"] move to workspace $ws1
+for_window [app_id="Vivaldi-stable"] focus
+for_window [app_id="Vivaldi-stable" window_role="pop-up"] focus; floating enable; focus
+for_window [app_id="geany"] move to workspace $ws2
+for_window [app_id="geany"] focus
+for_window [app_id="thunar"] move to workspace $ws3
+for_window [app_id="thunar"] focus
+for_window [app_id="Pcmanfm"] move to workspace $ws3
+for_window [app_id="Pcmanfm"] focus
+for_window [app_id="Nemo"] move to workspace $ws3
+for_window [app_id="Nemo"] focus
+for_window [app_id="Xfe"] move to workspace $ws3
+for_window [app_id="Xfe"] focus
+for_window [app_id="mpv"] move to workspace $ws10
+for_window [app_id="mpv"] focus
+
+for_window [app_id="Lxappearance"] move to workspace $ws8
+for_window [app_id="Lxappearance"] focus; floating enable; focus
+for_window [app_id="Pavucontrol"] floating enable; focus
+for_window [app_id="Nm-connection-editor"] floating enable; focus
+
+
+####### i3 gaps
+# i3 gaps
+gaps inner 4
+gaps outer 4
+
+set $mode_gaps Gaps: (o) outer, (i) inner
+set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+bindsym $mod+Shift+g mode "$mode_gaps"
+
+mode "$mode_gaps" {
+        bindsym o      mode "$mode_gaps_outer"
+        bindsym i      mode "$mode_gaps_inner"
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+mode "$mode_gaps_inner" {
+        bindsym plus  gaps inner current plus 5
+        bindsym minus gaps inner current minus 5
+        bindsym 0     gaps inner current set 0
+
+        bindsym Shift+plus  gaps inner all plus 5
+        bindsym Shift+minus gaps inner all minus 5
+        bindsym Shift+0     gaps inner all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+mode "$mode_gaps_outer" {
+        bindsym plus  gaps outer current plus 5
+        bindsym minus gaps outer current minus 5
+        bindsym 0     gaps outer current set 0
+
+        bindsym Shift+plus  gaps outer all plus 5
+        bindsym Shift+minus gaps outer all minus 5
+        bindsym Shift+0     gaps outer all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+## We need this bar cuz waybar has no ideea what to do with swaynag ...
+## Is set to hiden and fully transparent, is u pres mo key will show up
+## but you need to change the transparency from background
+bar {
+    position bottom
+    tray_output none
+    gaps 0 150
+    height 0
+    hidden_state hide
+    mode hide
+
+    # When the status_command prints a new line to stdout, swaybar updates.
+    # The default just shows the current date and time.
+    #status_command while date +'%Y-%m-%d %I:%M:%S %p'; do sleep 1; done
+	workspace_buttons no
+    colors {
+        statusline #ffffff
+        background #00000000
+        inactive_workspace #32323200 #32323200 #5c5c5c
+    }
+}
