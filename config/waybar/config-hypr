@@ -7,12 +7,66 @@
 								
 								// Choose the order of the modules
 								
-    "modules-left": ["hyprland/workspaces", "hyprland/window"],
+    "modules-left": ["sway/workspaces", "sway/window"],
     "modules-center": ["clock"],
     "modules-right": ["idle_inhibitor", "network", "pulseaudio", "tray"],
 								
 								// Modules configuration
-								
+
+     "sway/workspaces": {
+         "disable-scroll": true,
+         "all-outputs": true,
+         "warp-on-scroll": false,
+         "format": "{name}: {icon}",
+         "format-icons": {
+				"1": "",
+				"2": "",
+				"3": "",
+				"6": "",
+				"7": "",
+             "urgent": "",
+             "focused": "",
+             "default": ""
+         },
+     },
+
+  "wlr/workspaces": {
+	"format": "{name}: {icon}",
+        "on-click": "activate",
+	"format-icons": {
+		"1": "",
+		"2": "",
+		"3": "",
+		"4": "",
+		"5": "",
+		"active": "",
+		"default": ""
+		},
+       "persistent_workspaces": {
+             "1": [],
+             "2": [],
+             "3": [],
+             "4": [],
+             "5": [],
+             "6": [],
+             "7": [],
+             "8": [],
+             "9": [],
+             "10": []
+       },
+	"sort-by-number": true
+  },
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    "sway/scratchpad": {
+        "format": "{icon} {count}",
+        "show-empty": false,
+        "format-icons": ["", ""],
+        "tooltip": true,
+        "tooltip-format": "{app}: {title}"
+    },
+
 	"hyprland/workspaces": {
 			"format": "{name}: {icon}",
 			"on-click": "activate",
@@ -127,4 +181,5 @@
 		"spacing": 10
 	}
 }
-	
+
+
