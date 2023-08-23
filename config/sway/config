@@ -1,11 +1,10 @@
-#exec $HOME/bin/export_env.sh
 exec $HOME/bin/autostart.sh
 exec pasystray -m 100 -i 5 &
 exec nm-applet --indicator &
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
+#output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
 ####### Some variables
 set $mod Mod4
 set $term kitty
