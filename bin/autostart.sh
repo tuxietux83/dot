@@ -212,14 +212,19 @@ done
 
 # We need the bar up and running
 # But we need time for audio services to restart
+# Waybar is tricky for sway, may get stuck ...
 SERVICE="waybar"
 SERVICE_UPDATE
 ! command -v "$SERVICE" &>/dev/null && echo "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Not found!$INFO_CLOSE" && exit 1
 echo -e "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Stopping ...$INFO_CLOSE"
-pkill "$SERVICE" &>/dev/null && sleep 1
+pkill "$SERVICE" &>/dev/null && sleep 3
 echo "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Starting ..."
-[ "$DESKTOP_SESSION" = sway ] && waybar -c $HOME/.config/waybar/config-sway &>/dev/null &
-[ "$DESKTOP_SESSION" = hyprland ] && waybar -c $HOME/.config/waybar/config-hypr &>/dev/null &
+if [ "$DESKTOP_SESSION" = sway ]; then
+	waybar -c $HOME/.config/waybar/config-sway &
+ 	sleep 6
+elif [ "$DESKTOP_SESSION" = hyprland ]; then
+	waybar -c $HOME/.config/waybar/config-hypr &>/dev/null &
+ fi
 echo "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Started ...$INFO_CHECK"
 
 [ "$DESKTOP_SESSION" = "sway" ] && swaymsg reload
