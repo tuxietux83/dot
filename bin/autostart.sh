@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 #NOTE: Not tested on sway!!
 #set -e -u   # Hyprland dont like this on
+	export SYSCONFDIR=$HOME/.config
 	export QT_QPA_PLATFORMTHEME=qt5ct
 	export QT_PLATFORMTHEME=qt5ct
 	export QT_PLATFORM_PLUGIN=qt5ct
