@@ -31,7 +31,7 @@ bindsym $mod+Shift+z restart
 bindsym $mod+Shift+e exec "swaynag -t warning\
                           -m 'System actions:'\
                           -B ' Shutdown' 'systemctl poweroff'\
-                          -B ' Restart' 'systemctl restart'\
+                          -B ' Restart' 'systemctl reboot'\
                           -B ' Logout' 'swaymsg exit'\
                           -f 'pango:$font_ $size_nagbar'"
  # YT-dlp to mpv
