@@ -7,7 +7,7 @@
 								
 								// Choose the order of the modules
 								
-    "modules-left": ["sway/workspaces", "sway/window"],
+    "modules-left": ["hyprland/workspaces", "hyprland/window"],
     "modules-center": ["clock"],
     "modules-right": ["idle_inhibitor", "network", "pulseaudio", "tray"],
 								
