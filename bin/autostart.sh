@@ -2,6 +2,8 @@
 #NOTE: Not tested on sway!!
 #set -e -u   # Hyprland dont like this on
 	export SYSCONFDIR=$HOME/.config
+ 	export XDG_CONFIG_HOME=$HOME/.config
+  	export XDG_DATA_HOME=$HOME/.local/share
 	export QT_QPA_PLATFORMTHEME=qt5ct
 	export QT_PLATFORMTHEME=qt5ct
 	export QT_PLATFORM_PLUGIN=qt5ct
