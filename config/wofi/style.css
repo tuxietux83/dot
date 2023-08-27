@@ -49,7 +49,7 @@
 
 #entry:selected {
 	background-color: --wofi-color3;
-	background: linear-gradient(90deg, #4B87CD, #2F3741);
+	background: linear-gradient(90deg, rgba(51, 204, 255, 0.93), rgba(0, 255, 153, 0.93));
 	color: --wofi-color0;
 }
 
