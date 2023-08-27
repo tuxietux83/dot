@@ -1,9 +1,6 @@
 #!/usr/bin/bash
 #NOTE: Not tested on sway!!
 #set -e -u   # Hyprland dont like this on
-	export SYSCONFDIR=$HOME/.config
- 	export XDG_CONFIG_HOME=$HOME/.config
-  	export XDG_DATA_HOME=$HOME/.local/share
 	export QT_QPA_PLATFORMTHEME=qt5ct
 	export QT_PLATFORMTHEME=qt5ct
 	export QT_PLATFORM_PLUGIN=qt5ct
@@ -132,7 +129,7 @@ if command -v "$SERVICE" &>/dev/null; then
 			echo -e "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Starting ..."
 			$($SCTL_START $SERVICE.service)
 			echo "$SCTL_INFO$SERVICE_INFO$INFO_ARROW $($SCTL_ACTIVE $SERVICE.service)$INFO_CHECK"
-			hyprctl notify -0 10000 "rgb(6AA84F)" "mako --> $($SCTL_ACTIVE mako.service)" &>/dev/null
+			hyprctl notify -0 10000 "rgb(6AA84F)" "$HYPR_INFO$HYPR_SERVICE -> $($SCTL_ACTIVE $SERVICE.service)" &>/dev/null
 		fi
 	else
 		$($SCTL_ACTIVE $SERVICE.service) &>/dev/null && $($SCTL_FAILED $SERVICE.service) &&\
@@ -142,7 +139,7 @@ if command -v "$SERVICE" &>/dev/null; then
 		echo -e "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Starting ..."
 		$($SCTL_START $SERVICE.service)
 		echo "$SCTL_INFO$SERVICE_INFO$INFO_ARROW $($SCTL_ACTIVE $SERVICE.service)$INFO_CHECK"
-		hyprctl notify -0 10000 "rgb(6AA84F)" "mako --> $($SCTL_ACTIVE mako.service)" &>/dev/null
+		hyprctl notify -0 10000 "rgb(6AA84F)" "$HYPR_INFO$HYPR_SERVICE -> $($SCTL_ACTIVE $SERVICE.service)" &>/dev/null
 	fi
 fi
 SERVICE="dunst"
@@ -157,7 +154,7 @@ if command -v "$SERVICE" &>/dev/null; then
 			echo -e "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Starting ..."
 			$($SCTL_START $SERVICE.service)
 			echo "$SCTL_INFO$SERVICE_INFO$INFO_ARROW $($SCTL_ACTIVE $SERVICE.service)$INFO_CHECK"
-			hyprctl notify -0 10000 "rgb(6AA84F)" "mako --> $($SCTL_ACTIVE mako.service)" &>/dev/null
+			hyprctl notify -0 10000 "rgb(6AA84F)" "$HYPR_INFO$HYPR_SERVICE -> $($SCTL_ACTIVE $SERVICE.service)" &>/dev/null
 		fi
 	else
 		$($SCTL_ACTIVE $SERVICE.service) &>/dev/null && $($SCTL_FAILED $SERVICE.service) &&\
@@ -167,7 +164,7 @@ if command -v "$SERVICE" &>/dev/null; then
 		echo -e "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Starting ..."
 		$($SCTL_START $SERVICE.service)
 		echo "$SCTL_INFO$SERVICE_INFO$INFO_ARROW $($SCTL_ACTIVE $SERVICE.service)$INFO_CHECK"
-		hyprctl notify -0 10000 "rgb(6AA84F)" "mako --> $($SCTL_ACTIVE mako.service)" &>/dev/null
+		hyprctl notify -0 10000 "rgb(6AA84F)" "$HYPR_INFO$HYPR_SERVICE -> $($SCTL_ACTIVE $SERVICE.service)" &>/dev/null
 	fi
 fi
 
@@ -215,19 +212,14 @@ done
 
 # We need the bar up and running
 # But we need time for audio services to restart
-# Waybar is tricky for sway, may get stuck ...
 SERVICE="waybar"
 SERVICE_UPDATE
 ! command -v "$SERVICE" &>/dev/null && echo "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Not found!$INFO_CLOSE" && exit 1
 echo -e "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Stopping ...$INFO_CLOSE"
-pkill "$SERVICE" &>/dev/null && sleep 3
+pkill "$SERVICE" &>/dev/null && sleep 1
 echo "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Starting ..."
-if [ "$DESKTOP_SESSION" = sway ]; then
-	waybar -c $HOME/.config/waybar/config-sway &
- 	sleep 6
-elif [ "$DESKTOP_SESSION" = hyprland ]; then
-	waybar -c $HOME/.config/waybar/config-hypr &>/dev/null &
- fi
+[ "$DESKTOP_SESSION" = sway ] && waybar -c $HOME/.config/waybar/config-sway &>/dev/null &
+[ "$DESKTOP_SESSION" = hyprland ] && waybar -c $HOME/.config/waybar/config-hypr &>/dev/null &
 echo "$SCTL_INFO$SERVICE_INFO$INFO_ARROW Started ...$INFO_CHECK"
 
 [ "$DESKTOP_SESSION" = "sway" ] && swaymsg reload
